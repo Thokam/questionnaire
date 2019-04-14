@@ -2,7 +2,9 @@ import pprint
 import random
 import sys
 from docx import Document
+import argparse
 
+#special rules 
 def anzahl(thema):
     anzahl = 0
 
@@ -39,36 +41,54 @@ def anzahl(thema):
     return anzahl
 
 
-def create_fragebogen():
-
-    fragen = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
-    feld = 0
-
-    id = random.randint(1,1000000)
-    print (id)
-
-
-    with open("fragen.txt", "r") as file:
+def get_questions(filename):
+    temp_fragen=[]
+    thema_fragen=[]
+    with open(filename, "r") as file:
+        
         for line in file:
             line.strip()
             if line != "###\n":
-                fragen[feld].append(line)
+                thema_fragen.append(line)
             else:
-                feld +=1
+                temp_fragen.append(thema_fragen)
+                thema_fragen = []
+                #feld +=1
+        temp_fragen.append(thema_fragen)
+    return temp_fragen
 
-    res = []
+def create_fragebogen():
 
-    for thema in range(0, len(fragen)):
-        if len(fragen[thema]) > 0:
-            output = random.sample(fragen[thema], anzahl(thema))
+    #All questions. One sublist per topic. Topics are seperated by '###'
+    all_questions = []
+
+    #random id. Unique for questionnaire (as text and docx) and answerfile  
+    id = random.randint(1,100000000)
+
+    all_questions = get_questions(args.filename)
+  
+    #subset of all_questions
+    random_questions = []
+
+    for topic in range(0, len(all_questions)):
+        if args.number_q != -1:
+            number_questions=args.number_q
+        else: 
+            number_questions = anzahl(topic)
+
+        if len(all_questions[topic]) > 0:
+            output = random.sample(all_questions[topic], number_questions)
             for item in output:
-                res.append(item)       
+                random_questions.append(item)       
 
-    pprint.pprint(res)
+    #debug-output
+    pprint.pprint(random_questions)
 
-    with open("fragebogen_"+str(id)+".txt", "a") as out:
-        with open ("fragebogen_antwort_"+str(id)+".txt", "w") as control:
-            q = random.sample(res, len(res))
+
+    #create questionnaire and a file names 'check' with the correct answers in the correct order 
+    with open(args.output_file+"_"+str(id)+".txt", "a") as out:
+        with open (args.output_file+"_check_"+str(id)+".txt", "w") as control:
+            q = random.sample(random_questions, len(random_questions))
             for item in q:
                 f = item.split("?")[0]
                 out.write(f+"?\n")
@@ -79,18 +99,28 @@ def create_fragebogen():
                 out.write("\n")
                 control.write(f+": "+(str)(item.split("?")[1].split("#")[1]))
 
-
-    with open("fragebogen_"+str(id)+".txt", "r") as input:
-        contents =input.read()
+    #copy questionnaire to a docx-file
+    with open(args.output_file+"_"+str(id)+".txt", "r") as input:
+        content =input.read()
 
         document = Document()
 
         document.add_heading('Fragebogen: '+str(id), 0)
-        document.add_paragraph(contents)
+        document.add_paragraph(content)
 
 
-        document.save('fragebogen'+str(id)+'.docx')
+        document.save(args.output_file+'_'+str(id)+'.docx')
 
 if __name__ == "__main__":
-     for x in range(0,int(sys.argv[1])):
+
+    parser = argparse.ArgumentParser(description='Create questionnaires')
+    parser.add_argument('-c', '--count', type=int, default=1, help='number of questionnaires to create. Default = 1')
+    parser.add_argument('-f', '--filename', type=str, default="fragen.txt", help='file with the questions. Default=fragen.txt')
+    parser.add_argument('-n', '--number_q', type=int, default=1, help='number of questions per topic. Default=1. Use -1 for the special rules')
+    parser.add_argument('-o', '--output_file', type=str, default="antwort", help='filename-prefix for the questionnaire. Default=antwort')
+
+
+    args=parser.parse_args()
+
+    for x in range(0,args.count):
          create_fragebogen()
