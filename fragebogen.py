@@ -85,7 +85,7 @@ def create_fragebogen():
     pprint.pprint(random_questions)
 
 
-    #create questionnaire and a file names 'check' with the correct answers in the correct order 
+    #create questionnaire and a file named 'check' with the correct answers in the correct order 
     with open(args.output_file+"_"+str(id)+".txt", "a") as out:
         with open (args.output_file+"_check_"+str(id)+".txt", "w") as control:
             q = random.sample(random_questions, len(random_questions))
