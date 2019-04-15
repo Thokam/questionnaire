@@ -1,0 +1,28 @@
+h1? ich, bin, mir nicht, sicher#1
+h2? ich, bin, mir nicht, sicher#2,3
+h3? ich, bin, mir nicht, sicher#3
+h4? ich, bin, mir nicht, sicher#1,3,4
+h5? ich, bin, mir nicht, sicher#2
+h6? ich, bin, mir nicht, sicher#1,2
+h7? ich, bin, mir nicht, sicher#3,4
+###
+h8? ich, bin, mir nicht, sicher#1,3
+h9? ich, bin, mir nicht, sicher#1,3
+h10? ich, bin, mir nicht, sicher#1,3
+h11? ich, bin, mir nicht, sicher#1,3
+h12? ich, bin, mir nicht, sicher#1,3
+h13? ich, bin, mir nicht, sicher#1,3
+###
+h14? ich, bin, mir nicht, sicher#1,3
+h15? ich, bin, mir nicht, sicher#1,3
+h16? ich, bin, mir nicht, sicher#1,3
+h17? ich, bin, mir nicht, sicher#1,3
+h18? ich, bin, mir nicht, sicher#1,3
+h19? ich, bin, mir nicht, sicher#1,3
+###
+h20? ich, bin, mir nicht, sicher#1,2
+h21? ich, bin, mir nicht, sicher#1
+h22? ich, bin, mir nicht, sicher#2,3
+h23? ich, bin, mir nicht, sicher#3
+h24? ich, bin, mir nicht, sicher#1,3
+h25? ich, bin, mir nicht, sicher#4
