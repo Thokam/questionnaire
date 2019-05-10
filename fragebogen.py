@@ -39,7 +39,9 @@ def anzahl(thema):
     elif thema == 13:
         anzahl = 5
     else:
-        anzahl = 0
+        print ("Falsches Topic") 
+        print(thema)
+        #anzahl = 0
     return anzahl
 
 
@@ -68,6 +70,7 @@ def get_hard_questions(filename_hard):
 
     for x in range(0, len(temp_fragen)):
         used_qpt.append(0)
+
     while used <args.number_qh:
         t = random.randint(0, len(temp_fragen)-1)
         if used_qpt[t] < anzahl(t):
@@ -99,15 +102,28 @@ def create_fragebogen():
     
     if args.filename_hard != "0":
         random_questions,used_qpt = get_hard_questions(args.filename_hard)
+        #pprint.pprint(random_questions)
+        #print("hart")
+       # pprint.pprint(used_qpt)
 
     for topic in range(0, len(all_questions)):
         if args.number_q != -1:
             number_questions=args.number_q
         else: 
             number_questions = anzahl(topic)-used_qpt[topic]
+        
+      #  print("Topic:")
+      #  print(topic)
+      #  print("number, anzahl f top, used")
+      #  print(number_questions)
+      #  print(anzahl(topic))
+      #  print(used_qpt[topic])
+        
 
-        if len(all_questions[topic]) > 0:
+        if len(all_questions[topic]) > 0 and number_questions>0:
+           # pprint.pprint(all_questions[topic])
             output = random.sample(all_questions[topic], number_questions)
+         #   pprint.pprint(output)
             for item in output:
                 random_questions.append(item)       
 
@@ -122,12 +138,23 @@ def create_fragebogen():
             for item in q:
                 f = item.split("?")[0]
                 out.write(f+"?\n")
-                antworten = item.split("?")[1].split("#")[0].split(",")
+                try:
+                    antworten = item.split("?")[1].split("#")[0].split(",")
+                except:
+                    print("Error")
+                    for item2 in random_questions:
+                        print(item2)
+                    print("Item")
+                    print(item)
+
                 for a in antworten:
                     out.write("O "+a+"\n")
                 
                 out.write("\n")
-                control.write(f+": "+(str)(item.split("?")[1].split("#")[1]))
+                try:
+                    control.write(f+": "+(str)(item.split("?")[1].split("#")[1]))
+                except:
+                    print (item)
 
     #TODO Switch to docxtpl and use a template?
     #copy questionnaire to a docx-file
@@ -137,7 +164,10 @@ def create_fragebogen():
         document = Document()
 
         document.add_heading('Fragebogen: '+str(id), 0)
-        document.add_paragraph(content)
+        try:
+            document.add_paragraph(content)
+        except:
+            pprint.pprint(content)
 
 
         document.save(args.output_file+'_'+str(id)+'.docx')
