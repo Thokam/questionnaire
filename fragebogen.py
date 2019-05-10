@@ -50,7 +50,8 @@ def get_questions(filename):
         
         for line in file:
             line.strip()
-            if line != "###\n":
+            #if line != "###\n":
+            if not (line.startswith("###")):
                 thema_fragen.append(line)
             else:
                 temp_fragen.append(thema_fragen)
